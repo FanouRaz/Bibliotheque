@@ -1,5 +1,6 @@
 package com.fanou.bibliotheque.service;
 
+import com.fanou.bibliotheque.model.Exemplaire;
 import com.fanou.bibliotheque.model.Livre;
 import com.fanou.bibliotheque.repository.LivreRepository;
 
@@ -30,6 +31,7 @@ public class LivreService {
     public void deleteLivre(long id) {
         Livre livre = livreRepository.findById(id)
                                      .orElseThrow(EntityNotFoundException::new);
+       
         livreRepository.delete(livre);       
     }
 
@@ -37,4 +39,24 @@ public class LivreService {
        return livreRepository.save(livre);
     }
 
+    public List<Exemplaire> getExemplairesByBookId(long id){
+        Livre livre = livreRepository.findById(id)
+                                     .orElseThrow(EntityNotFoundException::new);
+
+        return livre.getExemplaires();
+    }
+
+    public Exemplaire createExemplaire(long id_livre, Exemplaire exemplaire){
+        Livre livre = livreRepository.findById(id_livre)
+                                     .orElseThrow(EntityNotFoundException::new);
+
+        exemplaire.setIsDispo(true);
+        exemplaire.setLivre(livre);
+
+        livre.getExemplaires()
+             .add(exemplaire);
+        
+        livreRepository.save(livre);
+        return exemplaire;
+    }
 }

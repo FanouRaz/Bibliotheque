@@ -2,6 +2,7 @@ package com.fanou.bibliotheque.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fanou.bibliotheque.model.Exemplaire;
 import com.fanou.bibliotheque.model.Livre;
 import com.fanou.bibliotheque.service.LivreService;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @RestController
@@ -60,4 +62,25 @@ public class LivreController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @GetMapping("/api/livre/exemplaires/{id}")
+    public ResponseEntity<List<Exemplaire>> getExemplaires(@PathVariable("id") long id) {
+        try{
+            List<Exemplaire> exemplaires = livreService.getExemplairesByBookId(id);
+            return ResponseEntity.ok(exemplaires);
+        } catch(EntityNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/api/livre/exemplaire/{id}")
+    public ResponseEntity<Exemplaire> createExemplaire(@PathVariable("id") long id, @RequestBody Exemplaire exemplaire){
+        try{
+            Exemplaire newExemplaire = livreService.createExemplaire(id,exemplaire);
+            return ResponseEntity.ok(newExemplaire);
+        } catch(EntityNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
 }
