@@ -46,4 +46,13 @@ public class ExemplaireService {
                  
        return exemplaireRepository.save(exemplaire);
     }
+
+    public Exemplaire updateIsDispo(long id){
+        Exemplaire exemplaire = exemplaireRepository.findById(id)
+                                                  .orElseThrow(EntityNotFoundException::new);
+
+        exemplaire.setIsDispo(!exemplaire.getIsDispo());
+        
+        return exemplaireRepository.save(exemplaire);
+    }
 }

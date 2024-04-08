@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -56,6 +57,16 @@ public class ExemplaireController {
             return ResponseEntity.status(HttpStatus.CREATED).body(newExemplaire);
         }catch(MethodArgumentNotValidException e){
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping("/api/exemplaire/{id}")
+    public ResponseEntity<Exemplaire> updateIsDispo(@PathVariable("id") long id){
+        try{
+            Exemplaire updated = exemplaireService.updateIsDispo(id);
+            return ResponseEntity.ok(updated);
+        } catch(EntityNotFoundException e){
+            return ResponseEntity.notFound().build();
         }
     }
 }
